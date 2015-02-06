@@ -3,19 +3,29 @@ Package responseUtil will hold any response to be returned by the controller
 */
 package responseUtil
 
-import "log"
+import (
+	"fmt"
+	"log"
+	"net/http"
+)
 
 // Response type describes itself
 type Response struct {
-	flash     string
-	response  string
-	error     string
-	exception string
+	flash        string
+	response     string
+	error        string
+	exception    string
+	stringResult string
+	intResult    int
+	writer       http.ResponseWriter
 }
 
 // New Response Constructor
-func New() *Response {
-	return new(Response)
+func New(w http.ResponseWriter) *Response {
+	resp := new(Response)
+	resp.writer = w
+
+	return resp
 }
 
 // SetFlashMessage sets a flash for further processing
@@ -49,7 +59,7 @@ func (resp *Response) SetException(exc string, code int) {
 }
 
 // Handle the response
-func (resp *Response) Handle() string {
+func (resp *Response) Handle() {
 	if resp.exception != "" {
 		log.Fatal(resp.exception)
 	}
@@ -58,5 +68,21 @@ func (resp *Response) Handle() string {
 		panic(resp.error)
 	}
 
-	return resp.GetResponse()
+	fmt.Fprint(resp.writer, resp.GetResponse())
+}
+
+func (resp *Response) SetIntResult(result int) {
+	resp.intResult = result
+}
+
+func (resp *Response) SetStringResult(result string) {
+	resp.stringResult = result
+}
+
+func (resp *Response) GetIntResult() int {
+	return resp.intResult
+}
+
+func (resp *Response) GetStringResult() string {
+	return resp.stringResult
 }

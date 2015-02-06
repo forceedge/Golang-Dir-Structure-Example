@@ -1,5 +1,5 @@
 /*
-Package messageService deals with any requests coming in relation to messages
+Package MessageController deals with any requests coming in relation to messages
 
 The methods provided by this package are:
 SaveMessage()
@@ -11,14 +11,18 @@ import (
 	"fmt"
 	"forceedge/Packages/Source/LogPackage/Controller"
 	"forceedge/Packages/Source/MessagePackage/MessageModel"
+	"forceedge/Packages/Utilities/Response"
 	"net/http"
 )
 
 // SaveMessage will store the message in postgres
 func SaveMessage(w http.ResponseWriter, r *http.Request) {
-	response := MessageModel.RegisterMessageAndNotify("some message goes here")
-	logPackage.Print("Request received, save message")
-	fmt.Fprint(w, response)
+	resp := responseUtil.New(w)
+	// logPackage.Print("Request received, save message")
+	MessageModel.RegisterMessageAndNotify(resp, "some message goes here")
+	// logPackage.Print(fmt.Sprintf("Request completed, message saved with id: %v", resp.GetIntResult()))
+
+	resp.Handle()
 }
 
 // RetrieveMessage will retrieve a message for a given id in the url

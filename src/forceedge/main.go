@@ -9,7 +9,6 @@ import (
 ////////////////////
 
 func main() {
-	//Register handlers
 	http.HandleFunc("/save/:message", MessageController.SaveMessage)
 	http.HandleFunc("/retrieve/:id", MessageController.RetrieveMessage)
 
