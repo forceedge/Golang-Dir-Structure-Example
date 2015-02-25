@@ -10,7 +10,7 @@ package MessageController
 import (
 	"fmt"
 	"forceedge/Packages/Source/LogPackage/Controller"
-	"forceedge/Packages/Source/MessagePackage/MessageModel"
+	"forceedge/Packages/Source/MessagePackage/MessageService"
 	"forceedge/Packages/Utilities/Response"
 	"net/http"
 )
@@ -19,7 +19,7 @@ import (
 func SaveMessage(w http.ResponseWriter, r *http.Request) {
 	resp := responseUtil.New(w)
 	// logPackage.Print("Request received, save message")
-	MessageModel.RegisterMessageAndNotify(resp, "some message goes here")
+	MessageService.RegisterMessageAndNotify(resp, "some message goes here")
 	// logPackage.Print(fmt.Sprintf("Request completed, message saved with id: %v", resp.GetIntResult()))
 
 	resp.Handle()
@@ -28,5 +28,5 @@ func SaveMessage(w http.ResponseWriter, r *http.Request) {
 // RetrieveMessage will retrieve a message for a given id in the url
 func RetrieveMessage(w http.ResponseWriter, r *http.Request) {
 	logPackage.Print("Request received, get message")
-	fmt.Fprint(w, MessageModel.GetMessage(5))
+	fmt.Fprint(w, MessageService.GetMessage(5))
 }
